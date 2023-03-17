@@ -8,6 +8,7 @@ import type { z } from 'zod';
  * @param schema A Zod schema describing the contents of the writable.
  * @param initialValue The initial value to use if no prior state has been saved in
  * localstorage.
+ * @param disableLocalStorage Skip interaction with localStorage, for example during SSR.
  * @returns A stored writable.
  */
 export default function storedWritable<T extends z.ZodType>(
@@ -44,6 +45,7 @@ export default function storedWritable<T extends z.ZodType>(
    * Delete any data saved for this StoredWritable in localstorage.
    */
   function clear() {
+    w.set(initialValue);
     localStorage.removeItem(key);
   }
 
