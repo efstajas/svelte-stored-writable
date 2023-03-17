@@ -1,5 +1,5 @@
 {
-  "name": "svelte-stored-writable",
+  "name": "@efstajas/svelte-stored-writable",
   "version": "0.1.0",
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically.",
   "keywords": [
