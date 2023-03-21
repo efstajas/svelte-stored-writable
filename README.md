@@ -73,3 +73,27 @@ const { foo, bar } = get(myStoredWritable); // foo: 'hello', bar: 1234
 ```
 
 Within a Svelte component, you can also use the usual `$writable` syntax to conveniently subscribe to changes of a `storedWritable`.
+
+### Setting a custom writable type
+
+If you want to use a custom TypeScript type for the storedWritable, you can pass an optional type parameter. When setting a type parameter,
+your `schema` parameter must match the supplied type.
+
+```ts
+
+import storedWritable from '@efstajas/svelte-stored-writable';
+import { z } from 'zod';
+
+interface MyWritableType {
+  foo: string;
+  bar: number;
+}
+
+const myWritableSchema = z.object({
+  foo: z.string(),
+  bar: z.number(),
+});
+
+// myStoredWritable is typed as Writable<MyWritableType>. `myWritableSchema` must match `MyWritableType`.
+const myStoredWritable = storedWritable<MyWritableType>('my-writable-key', myWritableSchema, { foo: 'hello', bar: 1234 });
+```
