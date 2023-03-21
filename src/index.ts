@@ -1,5 +1,11 @@
-import { writable, type Writable, get } from 'svelte/store';
-import type { z } from 'zod';
+import { writable, type Writable, get } from "svelte/store";
+import { z } from "zod";
+
+type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
+  ? 1
+  : 2
+  ? true
+  : false;
 
 /**
  * An extension of Svelte's `writable` that also saves its state to localStorage and
@@ -11,16 +17,21 @@ import type { z } from 'zod';
  * @param disableLocalStorage Skip interaction with localStorage, for example during SSR.
  * @returns A stored writable.
  */
-export default function storedWritable<T extends z.ZodType>(
+export default function storedWritable<
+  S extends z.infer<T>,
+  T extends z.ZodType = z.ZodType<S>
+>(
   key: string,
   schema: T,
   initialValue: z.infer<typeof schema>,
-  disableLocalStorage = false,
-): Writable<z.infer<typeof schema>> & { clear: () => void } {
+  disableLocalStorage = false
+): Writable<
+  Equals<T, typeof schema> extends true ? S : z.infer<typeof schema>
+> & { clear: () => void } {
   const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
 
-  const w = writable<z.infer<typeof schema>>(
-    stored ? schema.parse(JSON.parse(stored)) : initialValue,
+  const w = writable<S>(
+    stored ? schema.parse(JSON.parse(stored)) : initialValue
   );
 
   /**
