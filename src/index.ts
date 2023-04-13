@@ -30,6 +30,20 @@ export default function storedWritable<
 > & { clear: () => void } {
   const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
 
+  // Subscribe to window storage event to keep changes from another tab in sync.
+  if (!disableLocalStorage) {
+    window?.addEventListener("storage", (event) => {
+      if (event.key === key) {
+        if (event.newValue === null) {
+          w.set(initialValue);
+          return;
+        }
+
+        w.set(schema.parse(JSON.parse(event.newValue)));
+      }
+    });
+  }
+
   const w = writable<S>(
     stored ? schema.parse(JSON.parse(stored)) : initialValue
   );

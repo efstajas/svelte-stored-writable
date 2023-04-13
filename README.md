@@ -97,3 +97,7 @@ const myWritableSchema = z.object({
 // myStoredWritable is typed as Writable<MyWritableType>. `myWritableSchema` must match `MyWritableType`.
 const myStoredWritable = storedWritable<MyWritableType>('my-writable-key', myWritableSchema, { foo: 'hello', bar: 1234 });
 ```
+
+### Synchronizing values between tabs
+
+The storedWritable automatically uses [`storageEvent`](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) to keep changes to its localStorage key triggered from other tabs or windows synchronized.
