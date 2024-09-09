@@ -1,6 +1,6 @@
 {
   "name": "@efstajas/svelte-stored-writable",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "An extension of Svelte's writable that saves and restores data from localstorage automatically.",
   "keywords": [
@@ -21,10 +21,10 @@
   "author": "Georgios Jason Efstathiou",
   "license": "Apache-2.0",
   "dependencies": {
-    "svelte": "^3.57.0",
+    "svelte": "^4.2.19",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "typescript": "^5.0.2"
+    "typescript": "^5.5.4"
   }
 }
