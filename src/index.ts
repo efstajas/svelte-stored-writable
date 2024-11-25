@@ -1,5 +1,5 @@
 import { writable, type Writable, get } from "svelte/store";
-import { z } from "zod";
+import { SafeParseReturnType, z } from "zod";
 
 type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
   ? 1
@@ -30,6 +30,26 @@ export default function storedWritable<
 > & { clear: () => void } {
   const stored = !disableLocalStorage ? localStorage.getItem(key) : null;
 
+  const parseFromJson = (
+    content: string
+  ): SafeParseReturnType<string, T["_output"]> => {
+    return z
+      .string()
+      .transform((_, ctx) => {
+        try {
+          return JSON.parse(content);
+        } catch {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "invalid json",
+          });
+          return z.never;
+        }
+      })
+      .pipe(schema)
+      .safeParse(content);
+  };
+
   // Subscribe to window storage event to keep changes from another tab in sync.
   if (!disableLocalStorage) {
     window?.addEventListener("storage", (event) => {
@@ -39,14 +59,14 @@ export default function storedWritable<
           return;
         }
 
-        w.set(schema.parse(JSON.parse(event.newValue)));
+        const { success, data } = parseFromJson(event.newValue);
+        w.set(success ? data : initialValue);
       }
     });
   }
 
-  const w = writable<S>(
-    stored ? schema.parse(JSON.parse(stored)) : initialValue
-  );
+  const parsed = stored ? parseFromJson(stored) : null;
+  const w = writable<S>(parsed?.success ? parsed.data : initialValue);
 
   /**
    * Set writable value and inform subscribers. Updates the writeable's stored data in
