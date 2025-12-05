@@ -21,10 +21,11 @@
   "author": "Georgios Jason Efstathiou",
   "license": "Apache-2.0",
   "dependencies": {
-    "svelte": "^4.2.19",
+    "svelte": "^5.45.5",
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@typescript-eslint/types": "^8.48.1",
     "typescript": "^5.5.4"
   }
 }
