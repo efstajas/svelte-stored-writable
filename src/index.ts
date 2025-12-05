@@ -35,17 +35,17 @@ export default function storedWritable<
     window?.addEventListener("storage", (event) => {
       if (event.key === key) {
         if (event.newValue === null) {
-          w.set(initialValue);
+          w.set(initialValue as S);
           return;
         }
 
-        w.set(schema.parse(JSON.parse(event.newValue)));
+        w.set(schema.parse(JSON.parse(event.newValue)) as S);
       }
     });
   }
 
   const w = writable<S>(
-    stored ? schema.parse(JSON.parse(stored)) : initialValue
+    (stored ? schema.parse(JSON.parse(stored)) : initialValue) as S
   );
 
   /**
@@ -70,7 +70,7 @@ export default function storedWritable<
    * Delete any data saved for this StoredWritable in localstorage.
    */
   function clear() {
-    w.set(initialValue);
+    w.set(initialValue as S);
     localStorage.removeItem(key);
   }
 
