@@ -12,7 +12,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/efstajas/svelte-stored-writable.git"
+    "url": "git+https://github.com/efstajas/svelte-stored-writable.git"
   },
   "scripts": {
     "clean": "rm -rf lib/*",
