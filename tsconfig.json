@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2020",
     "module": "es6",
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
     "moduleResolution": "node",
+    "esModuleInterop": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ]
 }
